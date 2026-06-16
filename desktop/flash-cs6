@@ -1,0 +1,5 @@
+#!/bin/bash
+# Lanceur Flash CS6 (fixe le bon prefix Wine + dossier de travail).
+export WINEPREFIX="@WINEPREFIX@"
+cd "$WINEPREFIX/@FLASHSUB@" || exit 1
+exec wine Flash.exe "$@"

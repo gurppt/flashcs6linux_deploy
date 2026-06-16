@@ -1,0 +1,5 @@
+# Tout ce qui est depose ici (ISO Adobe, amtlib.dll) reste LOCAL.
+# Rien dans ce dossier ne part sur GitHub.
+*
+!.gitignore
+!README.txt

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Adobe Flash CS6
+GenericName=Animation Editor
+Comment=Flash Professional CS6 (Wine + tablette/pression)
+Exec=@HOME@/.local/bin/flash-cs6
+Path=@WINEPREFIX@/@FLASHSUB@
+Icon=applications-graphics
+Terminal=false
+Categories=Graphics;2DGraphics;
+StartupNotify=true
+StartupWMClass=flash.exe

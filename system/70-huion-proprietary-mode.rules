@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="@VID@", ATTR{idProduct}=="@PID@", TAG+="systemd", ENV{SYSTEMD_WANTS}="huion-proprietary-mode.service"

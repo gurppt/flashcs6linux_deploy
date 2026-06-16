@@ -1,0 +1,8 @@
+[Unit]
+Description=Huion tablet proprietary mode (pressure for wintab)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/huion-proprietary-mode.sh
+StandardOutput=append:/var/log/huion-proprietary-mode.log
+StandardError=append:/var/log/huion-proprietary-mode.log

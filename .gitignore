@@ -1,0 +1,14 @@
+# Cache/bundle local (gros) -> produit par make-offline-bundle.sh, va sur une Release
+vendor/
+*.tar.gz
+
+# Binaires compiles -> viennent du pack, pas de git
+*.dll
+*.so
+*.o
+*.exe
+
+# Fichiers sensibles fournis par l'utilisateur
+local/*
+!local/.gitignore
+!local/README.txt

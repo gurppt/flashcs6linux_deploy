@@ -1,0 +1,11 @@
+# Combinaison testée et fonctionnelle (Pop!_OS 24.04 / Ubuntu noble).
+OS base                    : Ubuntu noble (Pop!_OS 24.04)
+wine                       : wine-11.0  (winehq-stable 11.0.0.0~noble-1)
+gcc-multilib               : 4:13.2.0-7ubuntu1
+gcc-mingw-w64-i686-win32   : 13.2.0-6ubuntu1+26.1
+binutils-mingw-w64-i686    : 2.41.90.20240122-1ubuntu1+11.4
+mingw-w64-i686-dev         : 11.0.1-3build1
+mingw-w64-common           : 11.0.1-3build1
+libxcb1-dev (+ :i386)      : 1.15-1ubuntu2
+libxcb-xinput-dev:i386     : 1.15-1ubuntu2
+libusb-1.0-0-dev           : 2:1.0.27-1
