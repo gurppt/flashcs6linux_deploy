@@ -3,6 +3,8 @@
 Run **Adobe Flash Professional CS6** on Linux through Wine, with **working pen
 pressure** on a **Huion** tablet.
 
+<img width="500" height="500" alt="flashcs6linux_deploy_logo" src="https://github.com/user-attachments/assets/96d99be9-4e3b-4e2f-aed0-17e520ec0aa6" />
+
 Everything needed is bundled, and one script does the whole job. You do **not**
 need to know Wine, and you do **not** need to install it yourself — the installer
 brings its own. The only command you ever type is `./install.sh`.
