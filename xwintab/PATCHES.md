@@ -1,37 +1,36 @@
-# Les 7 correctifs XWinTab (pour Flash / Animate)
+# The 7 XWinTab patches (for Flash / Animate)
+Upstream XWinTab (Graham--M) targets Rebelle. Flash CS6 exercises code paths that
+Rebelle never uses, exposing 6 bugs + 1 missing feature. Fixed here:
 
-XWinTab d'origine (Graham--M) cible Rebelle. Flash CS6 exerce des chemins de code
-que Rebelle n'utilise jamais, révélant 6 bugs + 1 manque. Corrigés ici :
-
-1. **Ordinaux Wintab** — Flash résout les fonctions wintab *par ordinal*, pas par
-   nom. Ajout d'un `src/wintab32.def` avec les ordinaux canoniques de la spec
+1. **Wintab ordinals** — Flash resolves wintab functions *by ordinal*, not by
+   name. Added a `src/wintab32.def` with the spec's canonical ordinals
    (WTInfoW@1020, WTOpenW@1021, WTGetW@1061, WTClose@22, WTPacketsGet@23,
    WTPacketsPeek@80, WTEnable@40, WTOverlap@41, WTQueueSizeGet@84, WTQueueSizeSet@85)
-   et build avec ce `.def` (au lieu de `--kill-at`).
-
-2. **Acceptation du stylet sans bouton** (`check_device`) — exigeait
-   `num_buttons > 0`. Le pen Huion expose 0 bouton sous libinput (ils sont sur le
-   PAD). Assoupli : on n'exige que `valuator_info && axes >= 3` ; `nButtons` gardé.
-
-3. **WTInfoW(0,0)** — Flash sonde la présence tablette via `WTInfoW(0,0)` ; était
-   "unhandled" -> 0 -> "pas de tablette". Ajout du handler (retourne la taille du
-   LOGCONTEXTW si un device est sélectionné).
-
-4. **WTI_DEVICES (capacités)** — Flash interroge `DVC_PKTDATA/CSRDATA/X/Y/NPRESSURE`
-   pour activer l'UI de pression ; non gérées. Ajout du bloc `cat==WTI_DEVICES`
-   (masque WTPKT + structs AXIS X/Y/NPRESSURE, max de pression depuis le device).
-
-5. **Typo `pkt_peek_itr`** (WTPacketsPeek) — `(PktPeekIterData *) data` (cast sur
-   soi-même -> pointeur non initialisé). Crash : lecture à l'adresse 0x8 (membre
-   `dst`, offset 8). Corrigé en `(PktPeekIterData *) userData`.
-
-6. **WTPacketsPeek garde NULL** — Flash appelle WTPacketsPeek avec un buffer NULL
-   pour *compter* les packets ; `packet_copy` écrivait alors vers 0x0. Crash :
-   écriture à l'adresse 0x0. Gardé : `if (data->dst) ...` (comme WTPacketsGet).
-
-7. **Re-bind de contexte dans WTOpen** — Flash ré-ouvre un contexte à chaque
-   nouveau document sans jamais appeler WTClose. L'ancien garde `if (g_context.handle
-   ...) return NULL` renvoyait NULL -> nouveau doc sans pression. Corrigé : si un
-   contexte existe déjà, re-bind sur la nouvelle fenêtre (sous g_lock) et renvoie le
-   handle existant. (Symptôme d'origine : la pression disparaissait dès que Flash
-   se retrouvait sans aucun document ouvert.)
+   and build against this `.def` (instead of `--kill-at`).
+   
+2. **Accept a button-less stylus** (`check_device`) — it required
+   `num_buttons > 0`. The Huion pen reports 0 buttons under libinput (they live on
+   the PAD). Relaxed: only require `valuator_info && axes >= 3`; `nButtons` kept.
+   
+3. **WTInfoW(0,0)** — Flash probes for tablet presence via `WTInfoW(0,0)`; it was
+   unhandled -> 0 -> "no tablet". Added the handler (returns the size of the
+   LOGCONTEXTW when a device is selected).
+   
+4. **WTI_DEVICES (capabilities)** — Flash queries `DVC_PKTDATA/CSRDATA/X/Y/NPRESSURE`
+   to enable the pressure UI; these were unhandled. Added the `cat==WTI_DEVICES`
+   block (WTPKT mask + AXIS structs X/Y/NPRESSURE, pressure max read from the device).
+   
+5. **`pkt_peek_itr` typo** (WTPacketsPeek) — `(PktPeekIterData *) data` (casting the
+   wrong variable, pointing at itself -> uninitialised pointer). Crash: read at
+   address 0x8 (the `dst` member, offset 8). Fixed to `(PktPeekIterData *) userData`.
+   
+6. **WTPacketsPeek NULL guard** — Flash calls WTPacketsPeek with a NULL buffer to
+   *count* packets; `packet_copy` then wrote to 0x0. Crash: write at address 0x0.
+   Guarded with `if (data->dst) ...` (same as WTPacketsGet).
+   
+7. **Context re-bind in WTOpen** — Flash re-opens a context for every new document
+   without ever calling WTClose. The old guard `if (g_context.handle ...) return NULL`
+   returned NULL -> new document with no pressure. Fixed: if a context already
+   exists, re-bind it to the new window (under g_lock) and return the existing
+   handle. (Original symptom: pressure disappeared as soon as Flash was left with
+   no document open at all.)
